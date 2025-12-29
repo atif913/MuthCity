@@ -122,7 +122,6 @@ async def start_command(client: Client, message: Message):
             reply_markup=markup
         )
 
-
 # -------------------- START (NOT SUBSCRIBED) --------------------
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
@@ -130,35 +129,44 @@ async def not_joined(client: Client, message: Message):
     buttons = []
     join_buttons = []
 
+    # JOIN BUTTONS (SIDE BY SIDE)
     if FORCE_SUB_CHANNEL:
-        url1 = client.invitelink
-        join_buttons.append(InlineKeyboardButton("Join Channel 1", url=url1))
+        join_buttons.append(
+            InlineKeyboardButton("Join Channel 1", url=client.invitelink)
+        )
 
     if FORCE_SUB_CHANNEL_2:
-        join_buttons.append(InlineKeyboardButton("Join Channel 2", url=client.invitelink2))
+        join_buttons.append(
+            InlineKeyboardButton("Join Channel 2", url=client.invitelink2)
+        )
 
     if join_buttons:
         buttons.append(join_buttons)
 
-    try_again_url = (
-        f"https://t.me/{client.username}?start={message.command[1]}"
-        if len(message.command) > 1 else
-        f"https://t.me/{client.username}"
-    )
+    # TRY AGAIN — PRESERVE PAYLOAD IF EXISTS
+    if len(message.command) > 1:
+        # user came via post/batch link
+        try_again_url = f"https://t.me/{client.username}?start={message.command[1]}"
+    else:
+        # normal /start, force Telegram to rerun /start
+        try_again_url = f"https://t.me/{client.username}?start=retry"
 
-    buttons.append([InlineKeyboardButton("🔄 Try Again", url=try_again_url)])
+    buttons.append(
+        [InlineKeyboardButton("🔄 Try Again", url=try_again_url)]
+    )
 
     await message.reply(
         FORCE_MSG.format(
             first=message.from_user.first_name,
             last=message.from_user.last_name,
-            username=message.from_user.username,
+            username=None if not message.from_user.username else '@' + message.from_user.username,
             mention=message.from_user.mention,
             id=message.from_user.id
         ),
-        reply_markup=InlineKeyboardMarkup(buttons)
+        reply_markup=InlineKeyboardMarkup(buttons),
+        quote=True,
+        disable_web_page_preview=True
     )
-
 
 # -------------------- USERS --------------------
 @Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
