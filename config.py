@@ -8,13 +8,13 @@ from logging.handlers import RotatingFileHandler
 load_dotenv()
 
 #Bot token @Botfather
-TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8214138024:AAF7fj6b1RBzgll_XvW2CVgetv6N9zEQoI0")
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8469864586:AAHOVYUhRk9kk53UXXD_tupncs7fFhCjbnM")
 
 #Your API ID from my.telegram.org
-APP_ID = int(os.environ.get("APP_ID", "36118156"))
+APP_ID = int(os.environ.get("APP_ID", "38487493"))
 
 #Your API Hash from my.telegram.org
-API_HASH = os.environ.get("API_HASH", "01b0374aa2da7214346ac6f166681cf2")
+API_HASH = os.environ.get("API_HASH", "f69f94f85263200e354dc36c4bb9e80a")
 
 #Your db channel Id
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003529228629"))
@@ -27,7 +27,7 @@ PORT = os.environ.get("PORT", "8080")
 
 #Database 
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://atif:sa760111@cluster0.xdvmpvb.mongodb.net/?appName=Cluster0")
-DB_NAME = os.environ.get("DATABASE_NAME", "filesharexbot")
+DB_NAME = os.environ.get("DATABASE_NAME", "Muthcity")
 
 #force sub channel id, if you want enable force sub
 FORCE_SUB_CHANNEL = int(os.environ.get("FORCE_SUB_CHANNEL", "-1003643841596"))
@@ -38,7 +38,7 @@ TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
 #start message
 START_PIC = os.environ.get("START_PIC","https://graph.org/file/470c6bf266594ff8fff93-5a990f6c39fac060ec.jpg")
-START_MSG = os.environ.get("START_MESSAGE", "Hello {first}\n\n Hello! 👋 Welcome to my Samaj Seva Bot. Here you’ll find the best videos on Telegram. Enjoy!")
+START_MSG = os.environ.get("START_MESSAGE", "Hello {first}\n Hello! 👋 Welcome to my Muth City Bot. Here you’ll find the best videos on Telegram. Enjoy!")
 try:
     ADMINS=[]
     for x in (os.environ.get("ADMINS", "").split()):
@@ -47,7 +47,18 @@ except ValueError:
         raise Exception("Your Admins list does not contain valid integers.")
 
 #Force sub message 
-FORCE_MSG = os.environ.get("FORCE_SUB_MESSAGE", "Hello {first}\n\n<b> Hello {first} 👋 To use this bot, you must join our required channels. Join below and tap Try Again once done.</b>")
+FORCE_MSG = os.environ.get(
+    "FORCE_SUB_MESSAGE",
+    """<b>Hello {first}! 👋</b>
+
+<small>
+To continue using this bot, please join our required channels below 📢  
+After joining, tap <b>🔄 Try Again</b>.
+</small>
+
+✨ Thank you for your support!
+"""
+)
 
 #set your Custom Caption here, Keep None for Disable Custom Caption
 CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", None)
