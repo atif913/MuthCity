@@ -128,27 +128,37 @@ async def not_joined(client: Client, message: Message):
 
     buttons = []
     join_buttons = []
+    user_id = message.from_user.id
 
-    # JOIN BUTTONS (SIDE BY SIDE)
+    # -------- CHECK CHANNEL 1 --------
     if FORCE_SUB_CHANNEL:
-        join_buttons.append(
-            InlineKeyboardButton("Join Channel 1", url=client.invitelink)
-        )
+        try:
+            await client.get_chat_member(FORCE_SUB_CHANNEL, user_id)
+        except Exception:
+            # user NOT joined channel 1
+            join_buttons.append(
+                InlineKeyboardButton("Join Channel 1", url=client.invitelink)
+            )
 
+    # -------- CHECK CHANNEL 2 --------
     if FORCE_SUB_CHANNEL_2:
-        join_buttons.append(
-            InlineKeyboardButton("Join Channel 2", url=client.invitelink2)
-        )
+        try:
+            await client.get_chat_member(FORCE_SUB_CHANNEL_2, user_id)
+        except Exception:
+            # user NOT joined channel 2
+            join_buttons.append(
+                InlineKeyboardButton("Join Channel 2", url=client.invitelink2)
+            )
 
+    # Add join buttons if needed
     if join_buttons:
         buttons.append(join_buttons)
 
-    # TRY AGAIN — PRESERVE PAYLOAD IF EXISTS
+    # -------- TRY AGAIN (ALWAYS) --------
     if len(message.command) > 1:
-        # user came via post/batch link
+        # preserve deep-link payload
         try_again_url = f"https://t.me/{client.username}?start={message.command[1]}"
     else:
-        # normal /start, force Telegram to rerun /start
         try_again_url = f"https://t.me/{client.username}?start=retry"
 
     buttons.append(
